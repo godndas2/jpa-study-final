@@ -5,7 +5,6 @@ import org.jpafinal.domain.Order;
 import org.jpafinal.dto.OrderDto;
 import org.jpafinal.repository.OrderRepository;
 import org.jpafinal.repository.OrderSearch;
-import org.springframework.boot.web.servlet.filter.OrderedRequestContextFilter;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,28 +35,33 @@ public class OrderApiController {
             return all;
         }
 
-    /**
-    * @author halfdev
-    * @since 2020-01-16
-    * v1 보다는 개선 되었지만, 문제가 있다.
-    * LAZY Loading 으로 인한 쿼리가 너무 많이 호출된다.
-    * OrderDto 에는 Lazy 초기화가 발생한다.
-     * 참고로 Lazy Loading 은 영속성 컨텍스트에서 먼저 조회한다.
-    */
     @GetMapping("/api/v2/orders")
     public List<OrderDto> ordersV2() {
-        // Order 2개
-        // N + 1 문제 발생 (첫 번째 쿼리 결과로 N 만큼 추가 실행된다. 여기서 N=2)
-        // 1 + 회원 N + 배송 N -> 5 번의 쿼리가 나간다.
-        List<Order> orders = orderRepository.findAll(new OrderSearch()); // findAll -> findAllByString
 
-        //
+        List<Order> orders = orderRepository.findAll(new OrderSearch());
+
         List<OrderDto> result = orders.stream()
-                .map(OrderDto::new) // o -> new OrderDto(o) 이것과 같음
+                .map(OrderDto::new)
+                .collect(Collectors.toList());
+
+        return result;
+    }
+
+    @GetMapping("/api/v3/orders")
+    public List<OrderDto> ordersV3() {
+        List<Order> orders = orderRepository.findAllWithItem();
+
+        // order reference value 체크. jpa 에서는 id 가 똑같은 참조값도 똑같다.
+//        for (Order order : orders) {
+//            System.out.println("order ref="+ order + " id=" + order.getId());
+//
+//        }
+        List<OrderDto> result = orders.stream()
+                .map(OrderDto::new)
                 .collect(Collectors.toList());
 
         return result;
     }
 
 
-    }
+}
