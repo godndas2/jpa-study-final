@@ -6,6 +6,7 @@ import org.jpafinal.dto.OrderDto;
 import org.jpafinal.repository.OrderRepository;
 import org.jpafinal.repository.OrderSearch;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -26,11 +27,11 @@ public class OrderApiController {
 
     @GetMapping("/api/v1/orders")
     public List<Order> ordersV1() {
-        List<Order> all = orderRepository.findAll(new OrderSearch()); // findAll -> findAllByString
-        // for 문으로 돌려도 되고 Stream 으로 돌려도 됨
+        List<Order> all = orderRepository.findAll(new OrderSearch());
+
         for (Order order : all) {
-            order.getMember().getName(); // LAZY 강제 초기화
-            order.getDelivery().getAddress(); // LAZY 강제 초기화
+            order.getMember().getName();
+            order.getDelivery().getAddress();
         }
             return all;
         }
@@ -51,11 +52,25 @@ public class OrderApiController {
     public List<OrderDto> ordersV3() {
         List<Order> orders = orderRepository.findAllWithItem();
 
-        // order reference value 체크. jpa 에서는 id 가 똑같은 참조값도 똑같다.
-//        for (Order order : orders) {
-//            System.out.println("order ref="+ order + " id=" + order.getId());
-//
-//        }
+        List<OrderDto> result = orders.stream()
+                .map(OrderDto::new)
+                .collect(Collectors.toList());
+
+        return result;
+    }
+
+    /**
+    * @author halfdev
+    * @since 2020-01-17
+    * Collection 은 Lazy 로 해줘야한다.
+    * ordersV3 를 개선한 Paging 과 성능 이슈 해결
+    */
+    @GetMapping("/api/v3.1/orders")
+    public List<OrderDto> ordersV3_page(@RequestParam(value = "offset", defaultValue = "0") int offset,
+                                        @RequestParam(value = "limit", defaultValue = "100") int limit) {
+
+        List<Order> orders = orderRepository.findAllWithMemberDelivery(offset,limit);
+
         List<OrderDto> result = orders.stream()
                 .map(OrderDto::new)
                 .collect(Collectors.toList());

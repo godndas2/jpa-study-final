@@ -16,10 +16,12 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        default_batch_fetch_size: 100 # N + 1 에서 1 + 1 로 최적화, MAX 는 1000
     open-in-view: false
     database-platform: org.hibernate.dialect.H2Dialect
     database: h2
     show-sql: true
+
 logging:
   level:
     root: warn
