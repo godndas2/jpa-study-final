@@ -1,6 +1,7 @@
 package org.jpafinal.repository.order.query;
 
 import lombok.RequiredArgsConstructor;
+import org.jpafinal.dto.OrderFlatDto;
 import org.jpafinal.dto.OrderItemQueryDto;
 import org.jpafinal.dto.OrderQueryDto;
 import org.springframework.stereotype.Repository;
@@ -73,6 +74,17 @@ public class OrderQueryRepository {
         result.forEach(o -> o.setOrderItems(orderItemMap.get(o.getOrderId())));
 
         return result;
+    }
+
+    public List<OrderFlatDto> findAllByDto_flat() {
+        return em.createQuery(
+                "select new org.jpafinal.dto.OrderFlatDto(o.id, m.name, o.orderDate, o.orderStatus, d.address, i.name, oi.orderPrice, oi.count)" +
+                        " from Order o" +
+                        " join o.member m" +
+                        " join o.delivery d" +
+                        " join o.orderItems oi " +
+                        " join oi.item i", OrderFlatDto.class)
+                .getResultList();
     }
 
     /**
