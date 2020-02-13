@@ -10,16 +10,16 @@ import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 
 /**
-* @author halfdev
-* @since 2020-01-14
-* 주문 : 2 개
-* UserA
+ * @author halfdev
+ * @since 2020-01-14
+ * 주문 : 2 개
+ * UserA
  * JPA1 Book
  * JPA2 Book
-* UserB
+ * UserB
  * SPRING1 Book
  * SPRING2 Book
-*/
+ */
 @Component
 @RequiredArgsConstructor
 public class InitDatabase {
@@ -50,7 +50,7 @@ public class InitDatabase {
             em.persist(book2);
 
             OrderItem orderItem1 = OrderItem.createOrderItem(book1, 10000, 1);
-            OrderItem orderItem2 = OrderItem.createOrderItem(book2,20000,2);
+            OrderItem orderItem2 = OrderItem.createOrderItem(book2, 20000, 2);
 
             Delivery delivery = createDelivery(member);
             Order order = Order.createOrder(member, delivery, orderItem1, orderItem2);
@@ -58,7 +58,7 @@ public class InitDatabase {
         }
 
         public void dbInitB() {
-            Member member = createMember("userB","busan","2","2222");
+            Member member = createMember("userB", "busan", "2", "2222");
             em.persist(member);
 
             Book book1 = createBook("SPRING Book1", 20000, 200);
@@ -68,7 +68,7 @@ public class InitDatabase {
             em.persist(book2);
 
             OrderItem orderItem1 = OrderItem.createOrderItem(book1, 20000, 3);
-            OrderItem orderItem2 = OrderItem.createOrderItem(book2,40000,4);
+            OrderItem orderItem2 = OrderItem.createOrderItem(book2, 40000, 4);
 
             Delivery delivery = createDelivery(member);
             Order order = Order.createOrder(member, delivery, orderItem1, orderItem2);
@@ -88,7 +88,7 @@ public class InitDatabase {
         private Member createMember(String name, String city, String street, String zipCode) {
             Member member = new Member();
             member.setName(name);
-            member.setAddress(new Address(city,street,zipCode));
+            member.setAddress(new Address(city, street, zipCode));
             return member;
         }
 

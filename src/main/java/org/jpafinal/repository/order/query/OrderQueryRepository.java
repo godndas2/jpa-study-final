@@ -31,7 +31,7 @@ public class OrderQueryRepository {
     private List<OrderItemQueryDto> findOrderItems(Long orderId) {
         return em.createQuery(
                 "select new org.jpafinal.dto.OrderItemQueryDto(oi.order.id, i.name, oi.orderPrice, oi.count)" +
-                   " from OrderItem oi" +
+                        " from OrderItem oi" +
                         " join oi.item i" +
                         " where oi.order.id = :orderId", OrderItemQueryDto.class)
                 .setParameter("orderId", orderId)
@@ -88,10 +88,10 @@ public class OrderQueryRepository {
     }
 
     /**
-    * @author halfdev
-    * @since 2020-01-18
-    * findAllByDto_optimization() Refactoring Version
-    */
+     * @author halfdev
+     * @since 2020-01-18
+     * findAllByDto_optimization() Refactoring Version
+     */
 //    public List<OrderQueryDto> findAllByDto_optimizationV2() {
 //        List<OrderQueryDto> result = findOrders();
 //

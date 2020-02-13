@@ -7,11 +7,11 @@ import org.jpafinal.domain.OrderStatus;
 import java.time.LocalDateTime;
 
 /**
-* @author halfdev
-* @since 2020-01-19
-* 기존에 만들어 두었던 OrderItemQueryDto 와 OrderQueryDto 의 필드를
-* 모두 가져와서 한 번에 조인 후 쿼리를 날린다.
-*/
+ * @author halfdev
+ * @since 2020-01-19
+ * 기존에 만들어 두었던 OrderItemQueryDto 와 OrderQueryDto 의 필드를
+ * 모두 가져와서 한 번에 조인 후 쿼리를 날린다.
+ */
 @Data
 public class OrderFlatDto {
 

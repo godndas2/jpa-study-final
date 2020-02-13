@@ -90,11 +90,11 @@ public class OrderRepository {
 
 
     /**
-    * @author halfdev
-    * @since 2020-01-16
-    * Collection 에 @OneToMany 에서 fetch join 을 하면 DB 상에서 Paging 이 안된다.
-    * (memory 에 올려놓고 페이징을 시켜버리는데 실제로 되지는 않음)
-    */
+     * @author halfdev
+     * @since 2020-01-16
+     * Collection 에 @OneToMany 에서 fetch join 을 하면 DB 상에서 Paging 이 안된다.
+     * (memory 에 올려놓고 페이징을 시켜버리는데 실제로 되지는 않음)
+     */
     public List<Order> findAllWithItem() {
         return em.createQuery(
                 "select distinct o from Order o" +
